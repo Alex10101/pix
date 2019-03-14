@@ -1,35 +1,72 @@
 const Article = require('../models/articleSchema');
-
-get = (req, name, Null) => {
-  return req.body[name] || req.query[name] || Null;
-};
+const mongoose = require('mongoose');
 
 exports.getFew = (req, res) => {
-  const data = {
-    skip: get(req, 'skip', '0'),
-    limit: get(req, 'limit', '10'),
-    searchBy: get(req, 'search_by', {}),
-  };
+  console.log('getFew')
+  const data = res.locals.data;
 
-  Article.find(data.searchBy)
+  if(data.page > 1) {
+    data['skip'] = data.page * data.limit
+  }
+
+  Article.find()
       .skip(data.skip)
       .limit(data.limit)
-      .exec((err, data) => {
+      .exec((err, articles) => {
         if (err) throw err;
-        res.send(data);
+        Article.countDocuments((err, count) => {
+          res.send({
+            count, 
+            page: data.page,
+            limit: data.limit,
+            articles
+          });
+        })
       });
 };
 
-
 exports.getOne = (req, res) => {
-  res.send(req.query);
+  Article.find(mongoose.Types.ObjectId(req.params.id))
+  .exec((err, data) => {
+      if (err) throw err;
+      res.send(data);
+  })
 };
 
 exports.putOne = (req, res) => {
-  res.send(req.query);
+  // Non-direct queries for using mongoose middlewares which not implemented here
+  Article.findById(mongoose.Types.ObjectId(req.params.id)) 
+    .exec((err, article) => {
+      if(err) {
+        res.status(500).end();
+        console.log(err);
+        return;
+      }
+      article['title'] = req.body.title;
+      article['body'] = req.body.body;
+      article['updated_at'] = new Date();
+      
+      article.save((saveErr, updatedFile) => {
+          res.send({ updated_to: updatedFile });
+      });
+  });
 };
 
 exports.postOne = (req, res) => {
-  res.send(req.query);
+  article = new Article({
+    title: req.body.title,
+    body: req.body.body,
+    created_at: new Date()
+  });
+  article.save((err, data) => {
+    if(err) {
+      res.status(500).end();
+      return
+    }
+
+    res.send({
+      created: data
+    })
+  });
 };
 

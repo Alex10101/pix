@@ -1,4 +1,5 @@
-const app = require('express')();
+const express = require('express')
+const app = express();
 const mongoose = require('mongoose');
 
 mongoose.set('useFindAndModify', false);
@@ -15,22 +16,32 @@ mongoose.connection.on('error', (err) => {
 });
 
 const articlesController = require('./controllers/articlesController');
+const articleAsserts = require('./services/articleAsserts');
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.use(express.urlencoded({limit: '1kb', extended: true}));
 app.use(express.json({limit: '1kb'}));
 
-
-app.get('/articles?page=:pageNumber&limit=:limit', articlesController.getFew);
-app.get('/articles/:id', articlesController.getOne);
-app.put('/articles/:id', articlesController.putOne);
-app.post('/articles', articlesController.postOne);
+app.get('/articles', articleAsserts.getFew, articlesController.getFew);
+app.get('/articles/:id', articleAsserts.getOne, articlesController.getOne);
+app.put('/articles/:id', articleAsserts.putOne, articlesController.putOne);
+app.post('/articles', articleAsserts.postOne, articlesController.postOne);
 
 app.use(function set404(req, res) {
-  res.redirect('/');
+	res.status(404).end({
+	    "errors": [{
+	        "error": "Not Found"
+	    }]
+	})
 });
 
 app.use(function globErrorHandler(err, req, res) {
-  res.status(500).send(err);
+	console.log(err)
 });
 
 app.listen(8080);

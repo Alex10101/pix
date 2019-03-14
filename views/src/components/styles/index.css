@@ -1,0 +1,77 @@
+.container.main {
+	margin-top: 125px;
+	background: #d3d3d3bd;
+	height: 500px;
+	border-radius: 10px;
+	padding: 10px 30px;
+	position: relative;
+}
+
+.logo > a{
+	margin: 10px;
+}
+
+td {
+	text-align: center;
+}
+
+.table-row-button {
+	background: transparent;
+	margin: 0px 5px;
+}
+
+.header-main > a {
+	float: right;
+}
+
+.popup-container {
+	width: 600px;
+	height: 300px;
+	border-radius: 15px;
+	background: #fbf7f7f7;
+	position: absolute;
+	top: calc(50% - 200px);
+	left: calc(50% - 300px);
+
+}
+
+.popup-title {
+	width: 100%;
+	padding: 15px 30px;
+	font-size: 22px;
+	border-bottom: 1px solid #c7c1c4;
+}
+
+/*image adding in global style(views/public/styles/style.css)*/
+.popup-title > span {
+	width: 24px;
+	height: 24px;
+	margin: 5px;
+	background-size: contain;
+    background-repeat: no-repeat;
+    float: right;
+	display: block;
+	cursor: pointer;
+}
+
+.popup-body {
+	height: 170px;
+	padding: 15px 50px;
+}
+
+.popup-time {
+	width: 100%;
+	height: 65px;
+	border-top: 1px solid #c7c1c4;
+	padding: 10px 20px;
+}
+
+.popup-time > p {
+	display: inline-block;
+	margin: 10px;
+	font-size: 15px;
+}
+
+.popup-time > p > span {
+	color: #0676ffe8;
+}
