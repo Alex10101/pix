@@ -75,3 +75,47 @@ td {
 .popup-time > p > span {
 	color: #0676ffe8;
 }
+
+
+
+.pagination-bottom {
+	display: flex;
+    justify-content: center;
+}
+
+.Table__itemCount {
+  /* margin-top: 10px; */
+  font-size: 14px;
+}
+
+.Table__pagination {
+  position: absolute;
+  padding: 20px 10px;
+}
+
+.Table__pageButton {
+  font-size: 15px;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.Table__pageButton:disabled {
+  cursor: not-allowed;
+  color: gray;
+}
+
+.Table__pageButton--active {
+  color: #45b3e3;
+  outline: none!important;
+  font-weight: bold;
+}
+
+.Table__pageButton:focus {
+  outline: none;
+}
+
+.ReactTable .rt-thead.-header {
+     box-shadow: none; 
+}
