@@ -1,3 +1,20 @@
+/*
+
+Search bookmarks :
+
+Popup
+Header_Articles
+Table_styles
+
+
+Notes :
+
+Style pinned in index.html contain styles for images and self.
+
+*/
+
+/*Global styles*/
+
 .container.main {
 	margin-top: 125px;
 	background: #d3d3d3bd;
@@ -18,11 +35,35 @@ td {
 .table-row-button {
 	background: transparent;
 	margin: 0px 5px;
+	height: 35px;
+}
+
+/*Header_Articles*/
+
+.container-header {
+  height: 55px;
+  padding: 10px;
+}
+
+.header-main {
+	font-size: 22px;
+	font-weight: bold;
 }
 
 .header-main > a {
 	float: right;
 }
+
+.header-button {
+  width: 75px;
+  height: 30px;
+  line-height: 16px;
+  margin-right: 5px;
+  font-size: 17px;
+  padding: 5px;
+}
+
+/*Popup */
 
 .popup-container {
 	width: 600px;
@@ -42,7 +83,6 @@ td {
 	border-bottom: 1px solid #c7c1c4;
 }
 
-/*image adding in global style(views/public/styles/style.css)*/
 .popup-title > span {
 	width: 24px;
 	height: 24px;
@@ -77,6 +117,7 @@ td {
 }
 
 
+/*Table_styles*/
 
 .pagination-bottom {
 	display: flex;
@@ -94,7 +135,8 @@ td {
 }
 
 .Table__pageButton {
-  font-size: 15px;
+	box-sizing: border-box;
+  font-size: 17px;
   outline: none;
   border: none;
   background-color: transparent;
@@ -116,6 +158,32 @@ td {
   outline: none;
 }
 
+/*Rows*/
+.rt-td {
+	text-align: center;
+}
+
+div > .rt-tr {
+	align-items: center;
+}
+
+.ReactTable {
+	min-height: 240px;
+}
+
 .ReactTable .rt-thead.-header {
      box-shadow: none; 
 }
+
+/*Adding horisontal lines between pagination numbers*/
+
+.Table__pageButton__Line {
+	height: 17px;
+  overflow: hidden;
+  margin-top: 3px;
+}
+
+.Table__visiblePagesWrapper {
+	display: flex;
+}
+

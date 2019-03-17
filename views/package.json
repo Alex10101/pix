@@ -33,7 +33,9 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "eslint": "^5.12.0",
+    "eslint": "^5.15.2",
+    "eslint-config-google": "^0.12.0",
+    "eslint-plugin-react": "^7.12.4",
     "redux-devtools-extension": "^2.13.8"
   }
 }

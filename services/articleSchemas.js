@@ -7,5 +7,5 @@ exports.getFew = Joi.object().keys({
 
 exports.postOne = exports.putOne = Joi.object().keys({
   title: Joi.string().min(1).max(25).required().label("Title is required"),
-  body: Joi.string().min(1).max(25).required().label("Body is required"),
+  body: Joi.string().min(1).max(50).required().label("Body is required"),
 });

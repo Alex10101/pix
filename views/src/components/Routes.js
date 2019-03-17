@@ -11,14 +11,13 @@ const history = createBrowserHistory();
 
 class App extends Component {
   render() {
-    console.log('App', this.props)
     return (
       <div className="App">
         <div className="container main"> 
       	<BrowserRouter>  
       		<Switch>
             <Route exact path="/" render={() => (
-                <Redirect to="/articles"/>
+                <Redirect to="/articles?page=1&limit=10"/>
             )}/>
             <Route path="/articles/:id/edit" exact history={history}
               render={ (props) => <CreateForm article={ props.location.article || false }/> }

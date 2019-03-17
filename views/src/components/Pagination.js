@@ -71,7 +71,6 @@ export default class Pagination extends React.Component {
     const { PageButtonComponent = defaultButton } = this.props;
     const { visiblePages } = this.state;
     const activePage = this.props.page + 1;
-    console.log(visiblePages)
     return (
       <div className="Table__pagination">
         <div className="Table__prevPageWrapper">
@@ -88,17 +87,22 @@ export default class Pagination extends React.Component {
         <div className="Table__visiblePagesWrapper">
           {visiblePages.map((page, index, array) => {
             return (
-              <PageButtonComponent
-                key={page}
-                className={
-                  activePage === page
-                    ? "Table__pageButton Table__pageButton--active"
-                    : "Table__pageButton"
-                }
-                onClick={this.changePage.bind(null, page)}
-              >
-                {array[index - 1] + 2 < page ? `....${page}` : page}
-              </PageButtonComponent>
+              <React.Fragment key={page}>
+                <PageButtonComponent
+                  key={page}
+                  className={
+                    activePage === page
+                      ? "Table__pageButton Table__pageButton--active"
+                      : "Table__pageButton"
+                  }
+                  onClick={this.changePage.bind(null, page)}
+                >
+                  {array[index - 1] + 2 < page ? `...${page}` : page}
+                </PageButtonComponent>
+                <div key={page + 'div'} className="Table__pageButton__Line">
+                  {index === visiblePages.length - 1 ? '' : '|'} 
+                </div>
+              </React.Fragment>
             );
           })}
         </div>
