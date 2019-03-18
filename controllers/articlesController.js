@@ -34,12 +34,13 @@ exports.getOne = (req, res) => {
 };
 
 exports.putOne = (req, res) => {
+  console.log('putOne')
   // Non-direct queries for using mongoose middlewares which not implemented here
   Article.findById(mongoose.Types.ObjectId(req.params.id)) 
     .exec((err, article) => {
       if(err) {
         res.status(500).end();
-        console.log(err);
+        console.log("err", err);
         return;
       }
       article['title'] = req.body.title;

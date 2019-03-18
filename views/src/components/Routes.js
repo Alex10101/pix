@@ -17,7 +17,7 @@ class App extends Component {
       	<BrowserRouter>  
       		<Switch>
             <Route exact path="/" render={() => (
-                <Redirect to="/articles?page=1&limit=10"/>
+                <Redirect to="/articles?page=1"/>
             )}/>
             <Route path="/articles/:id/edit" exact history={history}
               render={ (props) => <CreateForm article={ props.location.article || false }/> }

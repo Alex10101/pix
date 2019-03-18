@@ -46,7 +46,22 @@ class TableComponent extends React.Component {
 
 class Table extends React.Component {
 	state = {
-		page: 0
+		page: this.handleURL('page') || 0,
+	}
+
+	handleURL(name) {
+	  	let url = new URLSearchParams(window.location.search)
+	  	let str = url.get('page')
+	  	if(str !== false) {
+	  		let num = Number(str)
+	  		if(num > 0) {
+	  			return num - 1
+	  		} else {
+	  			return num
+	  		}
+	  	} else {
+	  		return false
+	  	}
 	}
 
   render() {

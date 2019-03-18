@@ -55,6 +55,7 @@ exports.getFew = (req, res, next) => {
 };
 
 exports.getOne = (req, res, next) => {
+  console.log('getOne')
   if(!checkId(req.params.id, res)) {
     return;
   }
@@ -87,6 +88,7 @@ exports.putOne = (req, res, next) => {
 }
 
 exports.postOne = (req, res, next) => {
+  console.log('postOne')
   const data = {
     title: req.body.title,
     body: req.body.body,

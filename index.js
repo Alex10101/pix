@@ -18,14 +18,20 @@ mongoose.connection.on('error', (err) => {
 const articlesController = require('./controllers/articlesController');
 const articleAsserts = require('./services/articleAsserts');
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+app.all('*', (req,res,next) => {
+    if (!req.get('Origin')) return next();
+
+    res.set('Access-Control-Allow-Origin','*');
+    res.set('Access-Control-Allow-Methods','GET,POST,PUT');
+    res.set('Access-Control-Allow-Headers','X-Requested-With,Content-Type');
+
+    if ('OPTIONS' == req.method) return res.sendStatus(200);
+
+    next();
 });
 
-app.use(express.urlencoded({limit: '1kb', extended: true}));
-app.use(express.json({limit: '1kb'}));
+app.use(express.urlencoded({limit: '5kb', extended: true}));
+app.use(express.json({limit: '5kb'}));
 
 app.get('/articles', articleAsserts.getFew, articlesController.getFew);
 app.get('/articles/:id', articleAsserts.getOne, articlesController.getOne);
@@ -40,8 +46,10 @@ app.use(function set404(req, res) {
 	})
 });
 
-app.use(function globErrorHandler(err, req, res) {
-	console.log(err)
+app.use(function globErrorHandler(req, res, next) {
+	console.log("globErrorHandler")
+  res.send('err');
+  return;
 });
 
 app.listen(8080);
@@ -50,5 +58,5 @@ process.on('unhandledRejection', unhandledRejection = (reason, p) => {
   throw reason;
 });
 process.on('uncaughtException', uncaughtException = (error) => {
-  console.log(error);
+  console.log("uncaughtException", error);
 });

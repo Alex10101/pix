@@ -6,8 +6,8 @@ export default function ( state = [], action) {
         case articles.getArticles:
             return  action.payload || false;
 
-        case articles.getArticle:
-            return  action.payload || false;
+        // case articles.getArticle:
+        //     return  action.payload || false;
             
         case articles.postArticle:
             return [...state, { articles : action.payload}] || false;

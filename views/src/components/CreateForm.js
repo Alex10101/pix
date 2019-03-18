@@ -8,6 +8,8 @@ import * as actions from '../actions/articles';
 class CreateForm extends React.Component {
 	state = {
 		location : this.handleLocation(),
+		propsTitle: this.props.article ? this.props.article.title : '',
+		propsBody: this.props.article ? this.props.article.body : '',
 		title: this.props.article ? this.props.article.title : '',
 		body: this.props.article ? this.props.article.body : ''
 	}
@@ -27,7 +29,22 @@ class CreateForm extends React.Component {
 
 	handleSubmit(e) {
 		e.preventDefault()
-		console.log(e.currentTarget)
+		let data = {
+			title: this.state.title,
+			body: this.state.body
+		}
+
+		if(this.state.title === this.state.propsTitle && this.state.body === this.state.propsBody) {
+			console.log('return 2')
+			return;
+		}
+
+		if(this.state.location === 'create') {
+			this.props.postArticle(data)
+		} else {
+			let id = this.props.article._id
+			this.props.editArticle(id, data)
+		}
 	}
 
 	Capitalize(str){
@@ -41,7 +58,7 @@ class CreateForm extends React.Component {
 			'Edit'
 		console.log('CreateForm', this.props)
 		return(
-			<Form className="form-edit" onSubmit={this.handleSubmit}>
+			<Form className="form-edit" onSubmit={this.handleSubmit.bind(this)}>
 				<Header headerState={this.state.location}/>
 				<div className="form-edit-form">
 					<p>Title</p>

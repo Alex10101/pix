@@ -3,13 +3,6 @@ import { Link } from 'react-router-dom'
 
 class Header extends React.Component {
 
-	shouldComponentUpdate() {
-		if(!this.props.headerState || this.state.message === this.props.headerState) {
-			return false
-		}
-		return true
-	}
-
 	render() {
 		// console.log('Header', this.props)
 		let message = this.props.headerState ?
