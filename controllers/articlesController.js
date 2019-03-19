@@ -2,12 +2,13 @@ const Article = require('../models/articleSchema');
 const mongoose = require('mongoose');
 
 exports.getFew = (req, res) => {
-  console.log('getFew')
   const data = res.locals.data;
 
   if(data.page > 1) {
     data['skip'] = data.page * data.limit
   }
+
+  console.log('getFew', data)
 
   Article.find()
       .skip(data.skip)

@@ -15,17 +15,19 @@ class App extends Component {
       <div className="App">
         <div className="container main"> 
       	<BrowserRouter>  
-      		<Switch>
-            <Route exact path="/" render={() => (
-                <Redirect to="/articles?page=1"/>
-            )}/>
+          <React.Fragment>
             <Route path="/articles/:id/edit" exact history={history}
               render={ (props) => <CreateForm article={ props.location.article || false }/> }
             />
-            <Route path="/articles/create" exact component={CreateForm} history={history}/>
-      			<Route path="/articles" exact component={Index} history={history}/>
-      			<Route path="*" component={NotFound}/>
-      		</Switch>
+            <Route path="/articles/create" exact history={history} render={() => <CreateForm/>}/>
+            <Switch>
+              <Route exact path="/" render={() => (
+                  <Redirect to="/articles?page=1"/>
+              )}/>
+              <Route path="/articles" component={Index} history={history}/>
+              <Route component={NotFound}/>
+            </Switch>
+          </React.Fragment>
       	</BrowserRouter>
         </div>
       </div>

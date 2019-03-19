@@ -1,8 +1,7 @@
 import axios from 'axios';
-// axios.defaults.headers['crossDomain'] = true
 
 export const getArticles = (page, limit) => async dispatch => {
-    const res = await axios.get('http://localhost:8080/articles', { page, limit });
+    const res = await axios.get('http://localhost:8080/articles', { params: {page, limit }});
     dispatch({type: getArticles, payload: res.data});
 }
 
@@ -29,8 +28,11 @@ export const editArticle = (id, item) => async dispatch => {
 	}
 
 	const data = await axios.put(`http://localhost:8080/articles/${id}`, params);
-
 }
+
+// Loks pointless if we interact with the articles
+// which dosen't changes during the reading time.
+// There is rare cases to use it.
 
 // export const getArticle = (id) => async dispatch => {
 //     const res = await axios.get('http://localhost:8080/articles/', { id });

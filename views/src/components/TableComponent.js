@@ -8,46 +8,25 @@ import 'react-table/react-table.css';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 
-
 class TableComponent extends React.Component {
-
-  componentWillMount() {
-    this.props.getArticles();
-  }
-
-  handleEdit(article) {
-  	console.log('handleEdit', article)
-    this.props.Show(article, 'editArticle');
-  }
-
-  handleView(article) {
-    this.props.Show(article, 'popupArticle');
-  }
-
-  render() {
-    console.log('TableComponent', this.props);
-    return (
-      <div className="articleList">
-      { 
-      	this.props.articles.articles ? 
-      	<Table 
-      		data={this.props.articles.articles}
-      		handleEdit={this.handleEdit.bind(this)}
-      		handleView={this.handleView.bind(this)}
-      	/> 
-      	: ''
-      }
-      </div>
-    );
-  }
-}
-
-
-
-class Table extends React.Component {
 	state = {
 		page: this.handleURL('page') || 0,
 	}
+
+	componentWillMount() {
+		let page = 2
+		let limit = 1
+  	this.props.getArticles(page, limit);
+	}
+
+	componentWillUnmount() {
+		// console.log(123)
+	}
+
+  handleData() {
+  	// console.log(this.props.articles.count)
+  	return this.props.articles.articles
+  }
 
 	handleURL(name) {
 	  	let url = new URLSearchParams(window.location.search)
@@ -65,15 +44,15 @@ class Table extends React.Component {
 	}
 
   render() {
-  	console.log('Table', this.props)
+  	// console.log('Table', this.props)
     return (
       <ReactTable
 			    PaginationComponent={Pagination}
-			    defaultPageSize={4}
+			    defaultPageSize={1}
 			    page={this.state.page}
     			onPageChange={page => this.setState({page})}
 			    className="-striped -highlight"
-			    data={this.props.data}
+			    data={this.handleData()}
 			    columns={[
 			      {
 			        Header: 'Id',
@@ -104,12 +83,12 @@ class Table extends React.Component {
 					       		<Link to={{pathname: `/articles/${article._id}/edit`, article}}>
 							      	<button
 							      		className='btn btn-light table-row-button'
-							      		onClick={() => {this.props.handleEdit(article)}}
+							      		onClick={() => this.props.Show(article, 'editArticle')}
 							      	>Edit</button>
 						      	</Link>
 						      	<button
 						      		className='btn btn-light table-row-button'
-						      		onClick={() => this.props.handleView(article)}
+						      		onClick={() => this.props.Show(article, 'popupArticle')}
 						      	>View</button>
 				       		</React.Fragment>
 				        )

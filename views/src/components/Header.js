@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 class Header extends React.Component {
 
 	render() {
-		// console.log('Header', this.props)
+		console.log('Header', this.props)
 		let message = this.props.headerState ?
 		`/ ${this.props.headerState}` :
 		<Link to="/articles/create">
