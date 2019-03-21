@@ -6,6 +6,7 @@ import Index from './Index';
 import NotFound from './NotFound';
 import CreateForm from './CreateForm'
 import './styles/index.css';
+import Header from './Header';
 
 const history = createBrowserHistory();
 
@@ -16,6 +17,7 @@ class App extends Component {
         <div className="container main"> 
       	<BrowserRouter>  
           <React.Fragment>
+            <Header/>
             <Route path="/articles/:id/edit" exact history={history}
               render={ (props) => <CreateForm article={ props.location.article || false }/> }
             />

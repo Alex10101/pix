@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 exports.getFew = (req, res) => {
   const data = res.locals.data;
 
-  if(data.page > 1) {
+  if(data.page > 0) {
     data['skip'] = data.page * data.limit
   }
 

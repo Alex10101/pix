@@ -1,18 +1,52 @@
 import React from 'react';
 import TableComponent from './TableComponent'
-import Header from './Header';
 
 class Index extends React.Component {
   state = {
     popupArticle: false,
-    editArticle: false
+    display: true
   }
 
-  Show(article, name) {
-    console.log('Show', name)
-    if(article._id !== this.state[name]._id) {
+  componentDidMount() {
+    this.handleDisplay()
+  }
+
+  shouldComponentUpdate() {
+    this.handleDisplay()
+    return true
+  }
+
+  handleDisplay() {
+    let url = window.location.pathname
+    let edit = url.indexOf('/edit') > -1
+    let create = url.indexOf('/create') > -1
+    
+    if(!edit && !create && !this.state.display) {
       this.setState({
-        [name]: article
+        display: true
+      })
+      return
+    } 
+
+    if(edit || create) { 
+      if(this.state.display === true) {
+        this.setState({
+          display: false
+        })
+      }
+      return
+    }
+    return false
+  }
+
+  handlePopup(article) {
+    if(article._id !== this.state.popupArticle._id) {
+      this.setState({
+        popupArticle: article
+      })
+    } else {
+      this.setState({
+        popupArticle: false
       })
     }
   }
@@ -23,7 +57,7 @@ class Index extends React.Component {
       <div className="popup-container">
         <div className="popup-title">
           {article.title}
-          <span onClick={() => this.Show(false, 'popupArticle')}></span>
+          <span onClick={() => this.handlePopup(false, 'popupArticle')}></span>
         </div>
         <div className="popup-body">{article.body}</div>
         <div className="popup-time">
@@ -36,12 +70,12 @@ class Index extends React.Component {
   }
 
 
+
   render() {
     return(
-      <div className="main-table">
-      <Header  headerState = {this.state.editArticle || false }/>
+      <div className="main-table" style={{display: this.state.display ? 'flex' : 'none' }} >
         <TableComponent
-          Show={this.Show.bind(this)}
+          handlePopup={this.handlePopup.bind(this)}     
         />
         {this.Popup(this.state.popupArticle)}
       </div>

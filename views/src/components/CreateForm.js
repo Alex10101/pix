@@ -1,17 +1,35 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form'
 import { Link } from 'react-router-dom'
-import Header from './Header';
 import {connect} from 'react-redux';
 import * as actions from '../actions/articles';
 
 class CreateForm extends React.Component {
 	state = {
 		location : this.handleLocation(),
-		propsTitle: this.props.article ? this.props.article.title : '',
-		propsBody: this.props.article ? this.props.article.body : '',
-		title: this.props.article ? this.props.article.title : '',
-		body: this.props.article ? this.props.article.body : ''
+		article: undefined,
+		title: undefined,
+		body: undefined
+	}
+
+	componentWillReceiveProps(nextProps) {
+		console.log('componentWillReceiveProps')
+		// to prevent the blank inputs on page reloading
+		if(this.state.location === "create") {
+			return
+		}
+		let article = this.props.article
+		// if(nextProps.article === false) {
+		// 	let id = window.location.pathname.split('/')[2]
+		// 	article = nextProps.articles.articles.filter(article => {
+		// 		return article._id === id
+		// 	})[0]
+		// }
+		this.setState({
+			article,
+			title: article.title,
+			body: article.body
+		})
 	}
 
 	handleLocation() {
@@ -34,15 +52,15 @@ class CreateForm extends React.Component {
 			body: this.state.body
 		}
 
-		if(this.state.title === this.state.propsTitle && this.state.body === this.state.propsBody) {
-			console.log('return 2')
+		if(this.state.title === this.state.article.title && 
+			  this.state.body === this.state.article.body) {
 			return;
 		}
 
 		if(this.state.location === 'create') {
 			this.props.postArticle(data)
 		} else {
-			let id = this.props.article._id
+			let id = this.state.article._id
 			this.props.editArticle(id, data)
 		}
 	}
@@ -59,7 +77,6 @@ class CreateForm extends React.Component {
 		console.log('CreateForm', this.props)
 		return(
 			<Form className="form-edit" onSubmit={this.handleSubmit.bind(this)}>
-				<Header headerState={this.state.location}/>
 				<div className="form-edit-form">
 					<p>Title</p>
 					<input required type="text" name='title' maxLength="25"
