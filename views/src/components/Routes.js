@@ -18,10 +18,10 @@ class App extends Component {
       	<BrowserRouter>  
           <React.Fragment>
             <Header/>
-            <Route path="/articles/:id/edit" exact history={history}
-              render={ (props) => <CreateForm article={ props.location.article || false }/> }
+            <Route path="/articles/:id/edit" exact
+              render={ (props) => <CreateForm {...props} /> }
             />
-            <Route path="/articles/create" exact history={history} render={() => <CreateForm/>}/>
+            <Route path="/articles/create" exact render={(props) => <CreateForm {...props} />}/>
             <Switch>
               <Route exact path="/" render={() => (
                   <Redirect to="/articles?page=1"/>

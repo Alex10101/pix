@@ -11,7 +11,7 @@ class Index extends React.Component {
     this.handleDisplay()
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate(nextProps, nextState) {
     this.handleDisplay()
     return true
   }
@@ -25,7 +25,7 @@ class Index extends React.Component {
       this.setState({
         display: true
       })
-      return
+      return true
     } 
 
     if(edit || create) { 
@@ -34,7 +34,7 @@ class Index extends React.Component {
           display: false
         })
       }
-      return
+      return true
     }
     return false
   }

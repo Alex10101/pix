@@ -1,19 +1,21 @@
-import * as articles from '../actions/articles.js';
+import * as actions from '../actions/articles.js';
 
 export default function ( state = [], action) {
 
     switch( action.type ) {
-        case articles.getArticles:
+        case actions.getArticles:
             return  action.payload || false;
-
-        // case articles.getArticle:
-        //     return  action.payload || false;
             
-        case articles.postArticle:
-            return [...state, { articles : action.payload}] || false;
+        case actions.postArticle:
+            let data = {...state}
+                data.articles.push(action.payload)
+            return data;
 
-        case articles.editArticle:
-            return [...state, { articles : action.payload}] || false;
+        case actions.editArticle:
+                let i = action.payload.index
+                let data2 = {...state}
+                data2.articles[i] = action.payload.data
+            return data2;
 
         default:
             return state;

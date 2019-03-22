@@ -5,36 +5,50 @@ export const getArticles = (page, limit) => async dispatch => {
     dispatch({type: getArticles, payload: res.data});
 }
 
-export const postArticle = (item) => async dispatch => {
+export async function getArticle(id) {
+		console.log('getArticle')
+    const res = await axios.get(`http://localhost:8080/articles/${id}`,);
+    return res.data
+}
+
+export const postArticle = (article) => async dispatch => {
+		console.log('postArticle')
 		let params = {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			title: item.title, 
-			body: item.body 
+			title: article.title, 
+			body: article.body 
 		}
 
     const res = await axios.post(`http://localhost:8080/articles`, params);
-    dispatch({type: postArticle, payload: res.data});
+    dispatch({type: postArticle, payload: res.data.created});
 }
 
-export const editArticle = (id, item) => async dispatch => {
+export const editArticle = (article, id, index) => async dispatch => {
+	console.log('editArticle', article, id, index)
 	let params = {
 		headers: {
 			"Content-Type": "application/json"
 		},
-		title: item.title, 
-		body: item.body 
+		title: article.title, 
+		body: article.body 
 	}
 
-	const data = await axios.put(`http://localhost:8080/articles/${id}`, params);
+	const res = await axios.put(`http://localhost:8080/articles/${id}`, params);
+	dispatch({type: editArticle, payload: {
+		data: res.data.updated_to,
+		index: index
+	}});
+	return res.data.updated_to
 }
 
-// Loks pointless if we interact with the articles
-// which dosen't changes during the reading time.
-// There is rare cases to use it.
-
-// export const getArticle = (id) => async dispatch => {
-//     const res = await axios.get('http://localhost:8080/articles/', { id });
-//     dispatch({type: getArticle, payload: res.data});
-// }
+export const setVisible = (article, index) => {
+	return ({
+		type: setVisible,
+		payload: {
+			article,
+			index
+		}
+	})
+}
