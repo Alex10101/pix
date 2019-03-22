@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getArticles, setVisible } from '../actions/articles';
+import { getArticles, setEditable, setDisplaying } from '../actions/articles';
 import { Link } from 'react-router-dom';
 import Pagination from './Pagination';
 import 'react-table/react-table.css';
@@ -10,7 +10,7 @@ class TableComponent extends Component {
 	state = {
 		page: this.handleURL('page') || 0,
 		limit: this.handleURL('limit') || 4,
-		loading: true
+		loading: false
 	}
 
 	handleURL(name) {
@@ -29,21 +29,24 @@ class TableComponent extends Component {
 	}
 
 	fetchData = (state) => {
-		this.setState({
-			loading: true
-		})
+		// this.setState({
+		// 	loading: true
+		// })
 		this.props.getArticles(state.page, state.defaultPageSize)
-  	.then((data) => {
-  		this.setState({
-				loading: false
-			})
-  	})
+  	.then(
+  	// 	setTimeout((data) => {
+  	// 	this.setState({
+			// 	loading: false
+			// })
+  	// }, 300)
+  	)
 	}
 
   render() {
 
+  	console.log('render')
   	const { page, loading, limit } = this.state
-  	const { setVisible, handlePopup, articles } = this.props
+  	const { setEditable, setDisplaying, articles } = this.props
   	const { fetchData } = this
 
     return (
@@ -76,18 +79,17 @@ class TableComponent extends Component {
 			      {
 			        Header: undefined,
 			        Cell: (data) => {
-			        	let article = data.original;
 			        	return(
 				       		<React.Fragment>
-					       		<Link to={{pathname: `/articles/${article._id}/edit`}}>
+					       		<Link to={{pathname: `/articles/${data.original._id}/edit`}}>
 							      	<button
 							      		className='btn btn-light table-row-button'
-							      		onClick={() => setVisible(article, data.index)}
+							      		onClick={() => setEditable(data.original, data.index)}
 							      	>Edit</button>
 						      	</Link>
 						      	<button
 						      		className='btn btn-light table-row-button'
-						      		onClick={() => handlePopup(article)}
+						      		onClick={() => setDisplaying(data.original)}
 						      	>View</button>
 				       		</React.Fragment>
 				        )
@@ -105,4 +107,4 @@ function mapStateToProps({articles}) {
   };
 }
 
-export default connect(mapStateToProps, { getArticles, setVisible })(TableComponent);
+export default connect(mapStateToProps, { getArticles, setEditable, setDisplaying })(TableComponent);

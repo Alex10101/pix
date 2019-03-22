@@ -1,8 +1,8 @@
-import { setEditable } from '../actions/articles.js';
+import { setDisplaying } from '../actions/articles.js';
 
 export default function ( state = false, action) {
     switch( action.type ) {
-        case setEditable:
+        case setDisplaying:
             return  action.payload || false;
         default:
             return state;

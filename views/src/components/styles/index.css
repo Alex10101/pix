@@ -82,7 +82,7 @@ a, img {
 	position: absolute;
 	top: calc(50% - 200px);
 	left: calc(50% - 300px);
-
+	z-index: 1;
 }
 
 .popup-title {
@@ -127,6 +127,11 @@ a, img {
 
 
 /*Table_styles*/
+
+div.ReactTable .-loading > div {
+	transform: none!important;
+	transition: none!important;
+}
 
 .rt-tr-group {
 	height: 60px;

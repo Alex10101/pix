@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { editArticle, postArticle } from '../actions/articles';
 
 const CreateForm = ({ history, data, editArticle, postArticle}) => {
-	console.log(data)
 		let createState = {
 			button: 'Create',
 			send: postArticle,

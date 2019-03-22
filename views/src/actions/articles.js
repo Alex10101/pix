@@ -43,12 +43,19 @@ export const editArticle = (article, id, index) => async dispatch => {
 	return res.data.updated_to
 }
 
-export const setVisible = (article, index) => {
+export const setEditable = (article, index) => {
 	return ({
-		type: setVisible,
+		type: setEditable,
 		payload: {
 			article,
 			index
 		}
+	})
+}
+
+export const setDisplaying = (article) => {
+	return ({
+		type: setDisplaying,
+		payload: article
 	})
 }

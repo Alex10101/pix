@@ -53,17 +53,13 @@ export default class Pagination extends React.Component {
 
   changePage(page) {
     const activePage = this.props.page + 1;
-
     if (page === activePage) {
       return;
     }
-
     const visiblePages = this.getVisiblePages(page, this.props.pages);
-
     this.setState({
       visiblePages: this.filterPages(visiblePages, this.props.pages)
     });
-
     this.props.onPageChange(page - 1);
   }
 
