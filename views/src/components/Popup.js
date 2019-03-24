@@ -3,17 +3,19 @@ import { connect } from 'react-redux';
 import { setDisplaying } from '../actions/articles';
 
 const Popup = ({ article, setDisplaying }) => {
-  console.log(article)
 
   const handleClick = (e) => {
-    if(e.target.className.indexOf('popup') > -1) {
-      console.log(123)
-      setDisplaying(false)
-      window.removeEventListener('click', handleClick)
+    let ifclass = e.target.className.indexOf('popup') > -1
+    let ifname = e.target.innerHTML === 'View'
+    if(!ifclass && !ifname) {
+      if(e.target.parentNode.className.indexOf('popup') === -1){
+        handlePopup()
+        window.removeEventListener('click', handleClick)
+      }
     }
   }
 
-  // window.addEventListener('click', handleClick)
+  window.addEventListener('click', handleClick)
 
   const handlePopup = () => {
     setDisplaying(false)
@@ -31,8 +33,8 @@ const Popup = ({ article, setDisplaying }) => {
       </div>
       <div className="popup-body">{article.body}</div>
       <div className="popup-time">
-        <p>Created : <span>{article.created_at}</span></p>
-        <p>Updated : <span>{article.updated_at || 'Null'}</span></p>
+        <p className="popup-p">Created : <span>{article.created_at}</span></p>
+        <p className="popup-p">Updated : <span>{article.updated_at || 'Null'}</span></p>
       </div>
     </div>
   )

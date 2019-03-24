@@ -5,6 +5,14 @@ import { connect } from 'react-redux';
 import { editArticle, postArticle } from '../actions/articles';
 
 const CreateForm = ({ history, data, editArticle, postArticle}) => {
+
+		let create = history.location.pathname.indexOf('create') > -1 ? true : false
+
+		if(!create && data === false) {
+			history.push('/articles')
+			return('')
+		}
+
 		let createState = {
 			button: 'Create',
 			send: postArticle,
@@ -17,12 +25,7 @@ const CreateForm = ({ history, data, editArticle, postArticle}) => {
 			article: data.article
 		}
 
-		let create = history.location.pathname.indexOf('create') > -1 ? true : false
 		let state = create ? createState : editState
-
-		if(!create && !state.article) {
-			history.push('/articles')
-		}
 
 		const handleSubmit = (e) => {
 			e.preventDefault()

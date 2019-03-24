@@ -5,16 +5,16 @@ import { Link } from 'react-router-dom';
 import Pagination from './Pagination';
 import 'react-table/react-table.css';
 import ReactTable from 'react-table';
+import { withRouter } from 'react-router-dom'
 
 class TableComponent extends Component {
 	state = {
 		page: this.handleURL('page') || 0,
 		limit: this.handleURL('limit') || 4,
-		loading: false
+		loading: true
 	}
 
 	componentWillReceiveProps(nextProps, nextState) {
-		console.log(nextProps)
 	  this.setState({
 			loading: false
 		})
@@ -40,11 +40,14 @@ class TableComponent extends Component {
 			loading: true
 		})
 		this.props.getArticles(state.page, state.defaultPageSize)
+			.then((data) => {
+				this.props.history.push(`?page=${state.page}`)
+			})
 	}
 
   render() {
-
-  	console.log('render', this.props)
+  	console.log('ReactTable', this.props)
+  	
   	const { page, loading, limit } = this.state
   	const { setEditable, setDisplaying, articles } = this.props
   	const { fetchData } = this
@@ -107,4 +110,4 @@ function mapStateToProps({articles}) {
   };
 }
 
-export default connect(mapStateToProps, { getArticles, setEditable, setDisplaying })(TableComponent);
+export default withRouter(connect(mapStateToProps, { getArticles, setEditable, setDisplaying })(TableComponent));

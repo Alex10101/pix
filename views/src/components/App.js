@@ -25,7 +25,7 @@ const App = () => {
             <Route exact path="/" render={() => (
                 <Redirect to="/articles?page=1"/>
             )}/>
-            <Route exact path="/articles:page?" component={Index} history={history}/>
+            <Route path="/articles:page?" component={Index} history={history}/>
             <Route component={NotFound}/>
           </Switch>
         </React.Fragment>
