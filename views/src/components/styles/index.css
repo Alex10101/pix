@@ -16,7 +16,7 @@ Style pinned in index.html contain styles for images and self.
 /*Global styles*/
 
 .container.main {
-	margin-top: 125px;
+	margin: 7% auto;
 	background: #d3d3d3bd;
 	height: 500px;
 	border-radius: 10px;

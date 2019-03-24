@@ -1,27 +1,13 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { Component } from "react";
+
+// The following code based on this example : https://codesandbox.io/s/012ywx6mp0
 
 const defaultButton = props => <button {...props}>{props.children}</button>;
 
-export default class Pagination extends React.Component {
-  constructor(props) {
-    super();
-
-    this.changePage = this.changePage.bind(this);
-
-    this.state = {
-      visiblePages: this.getVisiblePages(null, props.pages)
-    };
+class Pagination extends Component {
+  state = {
+    visiblePages: this.getVisiblePages(null, this.props.pages)
   }
-
-  static propTypes = {
-    pages: PropTypes.number,
-    page: PropTypes.number,
-    PageButtonComponent: PropTypes.any,
-    onPageChange: PropTypes.func,
-    previousText: PropTypes.string,
-    nextText: PropTypes.string
-  };
 
   componentWillReceiveProps(nextProps) {
     if (this.props.pages !== nextProps.pages) {
@@ -33,11 +19,11 @@ export default class Pagination extends React.Component {
     this.changePage(nextProps.page + 1);
   }
 
-  filterPages = (visiblePages, totalPages) => {
+  filterPages(visiblePages, totalPages) {
     return visiblePages.filter(page => page <= totalPages);
   };
 
-  getVisiblePages = (page, total) => {
+  getVisiblePages(page, total) {
     if (total < 7) {
       return this.filterPages([1, 2, 3, 4, 5, 6], total);
     } else {
@@ -91,7 +77,7 @@ export default class Pagination extends React.Component {
                       ? "Table__pageButton Table__pageButton--active"
                       : "Table__pageButton"
                   }
-                  onClick={this.changePage.bind(null, page)}
+                  onClick={this.changePage.bind(this, page)}
                 >
                   {array[index - 1] + 2 < page ? `...${page}` : page}
                 </PageButtonComponent>
@@ -117,3 +103,5 @@ export default class Pagination extends React.Component {
     );
   }
 }
+
+export default Pagination

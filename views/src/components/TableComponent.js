@@ -13,6 +13,13 @@ class TableComponent extends Component {
 		loading: false
 	}
 
+	componentWillReceiveProps(nextProps, nextState) {
+		console.log(nextProps)
+	  this.setState({
+			loading: false
+		})
+	}
+
 	handleURL(name) {
   	let url = new URLSearchParams(window.location.search)
   	let str = url.get(name)
@@ -29,22 +36,15 @@ class TableComponent extends Component {
 	}
 
 	fetchData = (state) => {
-		// this.setState({
-		// 	loading: true
-		// })
+		this.setState({
+			loading: true
+		})
 		this.props.getArticles(state.page, state.defaultPageSize)
-  	.then(
-  	// 	setTimeout((data) => {
-  	// 	this.setState({
-			// 	loading: false
-			// })
-  	// }, 300)
-  	)
 	}
 
   render() {
 
-  	console.log('render')
+  	console.log('render', this.props)
   	const { page, loading, limit } = this.state
   	const { setEditable, setDisplaying, articles } = this.props
   	const { fetchData } = this
