@@ -46,7 +46,7 @@ class TableComponent extends Component {
 	}
 
   render() {
-  	console.log('ReactTable', this.props)
+  	// console.log('ReactTable', this.props)
   	
   	const { page, loading, limit } = this.state
   	const { setEditable, setDisplaying, articles } = this.props
@@ -82,6 +82,10 @@ class TableComponent extends Component {
 			      {
 			        Header: undefined,
 			        Cell: (data) => {
+				        	
+			        	if(articles.page === 0 && data.index <	articles.rcount) {
+			        		return null
+			        	}
 			        	return(
 				       		<React.Fragment>
 					       		<Link to={{pathname: `/articles/${data.original._id}/edit`}}>

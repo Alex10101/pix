@@ -1,4 +1,15 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useNewUrlParser', true);
+
+mongoose.connection.on('error', (err) => { console.error(err); process.exit(); });
+
+const readURL = process.env.DB_READ || 'mongodb://dan:dan123@ds259806.mlab.com:59806/pix'
+const writeURL = process.env.DB_WRITE || 'mongodb://dan:dan123@ds247347.mlab.com:47347/node'
+const readConnection      = mongoose.createConnection(readURL);
+const readWriteConnection = mongoose.createConnection(writeURL);
 
 const articleSchema = new mongoose.Schema({
   title: String,
@@ -7,6 +18,5 @@ const articleSchema = new mongoose.Schema({
   updated_at: Date,
 });
 
-const File = mongoose.model('articles', articleSchema);
-
-module.exports = File;
+exports.Readable = readConnection.model('articles', articleSchema);
+exports.Writable = readWriteConnection.model('articles', articleSchema);

@@ -1,7 +1,7 @@
-const Article = require('../models/articleSchema');
+const { Readable, Writable } = require('../models/articleSchema');
 const mongoose = require('mongoose');
 
-exports.getFew = (req, res) => {
+exports.getFew = async (req, res) => {
   const data = res.locals.data;
 
   if(data.page > 0) {
@@ -10,20 +10,39 @@ exports.getFew = (req, res) => {
 
   console.log('getFew', data)
 
-  Article.find()
+  let rcount  = await Readable.countDocuments()
+  let wcount = await Writable.countDocuments()
+
+  let readable = await Readable.find()
       .skip(data.skip)
       .limit(data.limit)
-      .exec((err, articles) => {
-        if (err) throw err;
-        Article.countDocuments((err, count) => {
-          res.send({
-            count, 
-            page: data.page,
-            limit: data.limit,
-            articles
-          });
-        })
-      });
+      .exec()
+
+  let writable = await Writable.find()
+    .skip(data.skip)
+    .limit(data.limit - readable.length)
+    .exec()
+
+  let rWarn = {
+    _id: "Read-only data"
+  }
+
+  let wWarn = {
+    _id: "Writable data"
+  }
+
+  let obj = {
+    count: rcount + wcount - 1,
+    rcount: readable.length,
+    rcount,
+    page: data.page,
+    limit: data.limit,
+    articles: readable.length ? 
+      [...readable, ...writable] 
+    : [...writable]
+  }
+
+  res.send(obj)
 };
 
 exports.getOne = (req, res) => {
