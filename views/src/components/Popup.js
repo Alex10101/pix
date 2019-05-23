@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setDisplaying } from '../actions/articles';
+import { setDisplaying, deleteArticle } from '../actions/articles';
 
-const Popup = ({ article, setDisplaying }) => {
+const Popup = ({ article, setDisplaying, deleteArticle }) => {
 
   const handleClick = (e) => {
     let ifclass = e.target.className.indexOf('popup') > -1
     let ifname = e.target.innerHTML === 'View'
-    if(!ifclass && !ifname) {
+    if(!ifclass && !ifname && e.target.parentNode) {
       if(e.target.parentNode.className.indexOf('popup') === -1){
-        handlePopup()
+        hidePopup()
         window.removeEventListener('click', handleClick)
       }
     }
@@ -17,25 +17,33 @@ const Popup = ({ article, setDisplaying }) => {
 
   window.addEventListener('click', handleClick)
 
-  const handlePopup = () => {
+  const hidePopup = () => {
     setDisplaying(false)
   }
 
-  if(!article) {
-    return ''
-  }
+  if(!article) return ''
 
   return(
     <div className="popup-container">
       <div className="popup-title">
         {article.title}
-        <span onClick={handlePopup}></span>
+        <span onClick={hidePopup}></span>
       </div>
       <div className="popup-body">{article.body}</div>
       <div className="popup-time">
         <p className="popup-p">Created : <span>{article.created_at}</span></p>
         <p className="popup-p">Updated : <span>{article.updated_at || 'Null'}</span></p>
       </div>
+      {
+        article.editable === undefined && 
+        <button 
+          className="btn btn-light delete" 
+          onClick={ () => {
+            deleteArticle(article._id, article.index)
+            hidePopup()
+          }}
+        >Delete</button>
+      }
     </div>
   )
 }
@@ -46,4 +54,4 @@ function mapStateToProps({display}) {
   };
 }
 
-export default connect(mapStateToProps, { setDisplaying })(Popup) 
+export default connect(mapStateToProps, { setDisplaying, deleteArticle })(Popup) 

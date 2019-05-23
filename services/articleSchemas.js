@@ -2,6 +2,7 @@ const Joi = require('joi');
 
 exports.getFew = Joi.object().keys({
   page: Joi.string().min(0).max(2),
+  skip: Joi.string().min(0).max(2),
   limit: Joi.string().min(0).max(2),
 });
 

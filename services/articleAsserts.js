@@ -21,6 +21,7 @@ checkId = (id, res) => {
 exports.getFew = (req, res, next) => {
   const data = {
     page: req.query.page,
+    skip: req.query.skip,
     limit: req.query.limit,
   };
 
@@ -46,7 +47,7 @@ exports.getFew = (req, res, next) => {
         if(pass) {
           res.locals.data = {
             page: data.page ? Number(data.page) : 1,
-            skip: 0,
+            skip: data.skip ? Number(data.skip) : 0,
             limit: data.limit ? Number(data.limit) : 10
           };
           next();

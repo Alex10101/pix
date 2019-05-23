@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import createBrowserHistory from "history/createBrowserHistory";
 import Index from './Index';
 import NotFound from './NotFound';
-import CreateForm from './CreateForm'
+import AppForm from './AppForm'
 import './styles/index.css';
 import Header from './Header';
 import Popup from'./Popup';
@@ -14,13 +14,12 @@ const App = () => {
   return (
     <div className="App">
       <div className="container main"> 
-
     	<BrowserRouter>  
         <React.Fragment>
           <Header/>
           <Popup/>
-          <Route path="/articles/:id/edit" exact render={ (props) => <CreateForm {...props} /> }/>
-          <Route path="/articles/create" exact render={(props) => <CreateForm {...props} />}/>
+          <Route path="/articles/:id/edit" exact render={ (props) => <AppForm {...props} /> }/>
+          <Route path="/articles/create" exact render={(props) => <AppForm {...props} />}/>
           <Switch>
             <Route exact path="/" render={() => (
                 <Redirect to="/articles?page=1"/>

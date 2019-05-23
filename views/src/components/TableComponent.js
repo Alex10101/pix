@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getArticles, setEditable, setDisplaying } from '../actions/articles';
+import { getArticles, setEditable, setDisplaying, getArticle } from '../actions/articles';
 import { Link } from 'react-router-dom';
 import Pagination from './Pagination';
 import 'react-table/react-table.css';
@@ -15,6 +15,10 @@ class TableComponent extends Component {
 	}
 
 	componentWillReceiveProps(nextProps, nextState) {
+		if(nextProps.articles.refresh === true) {
+			this.addData()
+		}
+
 	  this.setState({
 			loading: false
 		})
@@ -35,22 +39,67 @@ class TableComponent extends Component {
   	}
 	}
 
+	// item deleted
+	// refresh = true
+
+	// ignore refresh if
+	// this is the last page
+
+	// Get first item 
+	// from the next page
+
+	// and push in the end	
+
+	addData = () => {
+		let all = this.countPages()
+		let sp = this.state.page + 1
+		if(all < sp || all === sp) {
+			return
+		}
+
+		if(this.state.page === 0) {
+			this.props.getArticle(1, 1)
+			return
+		}
+
+		this.props.getArticle(sp, this.state.limit)
+	}
+
 	fetchData = (state) => {
 		this.setState({
 			loading: true
 		})
+
 		this.props.getArticles(state.page, state.defaultPageSize)
 			.then((data) => {
 				this.props.history.push(`?page=${state.page}`)
 			})
 	}
 
+	sliceData = () => {
+		if(!this.props.articles.articles)	return []
+		
+		if(this.state.limit < this.props.articles.articles.length) {
+			return this.props.articles.articles.slice(0, this.state.limit)
+		}
+
+		return this.props.articles.articles
+	}
+
+	countPages = () => {
+		return Math.ceil(this.props.articles.count / this.state.limit) || 0
+	}
+
   render() {
-  	// console.log('ReactTable', this.props)
-  	
+  	console.log('ReactTable', this.props)
+  	// console.log(this.state)
+  	// this.props.getArticle().then(data => {
+  	// 	console.log(data)
+  	// })
+
   	const { page, loading, limit } = this.state
   	const { setEditable, setDisplaying, articles } = this.props
-  	const { fetchData } = this
+  	const { fetchData, sliceData, countPages } = this
 
     return (
       <ReactTable
@@ -58,12 +107,14 @@ class TableComponent extends Component {
       		defaultPage={page}
 			    defaultPageSize={limit}
 			    onFetchData={fetchData}
+			    page={this.state.page}
+    			onPageChange={page => this.setState({page})}
 			    loading={loading}
 			    PaginationComponent={Pagination}
-			    pages={Math.ceil(articles.count / limit) || 0}			    
+			    pages={countPages()}			    
 			    className="-striped -highlight"
 			    NoDataComponent={() => <p></p>}
-			    data={articles.articles}
+			    data={sliceData()}
 			    sortable={false}
 			    resizable={false}
 			    columns={[
@@ -82,21 +133,26 @@ class TableComponent extends Component {
 			      {
 			        Header: undefined,
 			        Cell: (data) => {
-				        	
 			        	if(articles.page === 0 && data.index <	articles.rcount) {
-			        		return null
+			        		return(
+			        			<button
+			        				style={{marginLeft: "65px"}}
+						      		className='btn btn-light table-row-button'
+						      		onClick={() => setDisplaying(data.original, data.index, true)}
+						      	>View</button>
+			        		)
 			        	}
 			        	return(
 				       		<React.Fragment>
 					       		<Link to={{pathname: `/articles/${data.original._id}/edit`}}>
-							      	<button
+							      	<button 
 							      		className='btn btn-light table-row-button'
 							      		onClick={() => setEditable(data.original, data.index)}
 							      	>Edit</button>
 						      	</Link>
 						      	<button
 						      		className='btn btn-light table-row-button'
-						      		onClick={() => setDisplaying(data.original)}
+						      		onClick={() => setDisplaying(data.original, data.index, false)}
 						      	>View</button>
 				       		</React.Fragment>
 				        )
@@ -114,4 +170,4 @@ function mapStateToProps({articles}) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, { getArticles, setEditable, setDisplaying })(TableComponent));
+export default withRouter(connect(mapStateToProps, { getArticles, setEditable, setDisplaying, getArticle })(TableComponent));

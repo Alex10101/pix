@@ -1,11 +1,11 @@
-const { Readable, Writable } = require('../models/articleSchema');
+const { Readable, Writable, Get } = require('../models/articleSchema');
 const mongoose = require('mongoose');
 
 exports.getFew = async (req, res) => {
   const data = res.locals.data;
 
   if(data.page > 0) {
-    data['skip'] = data.page * data.limit
+    data['skip'] = (data.page * data.limit)
   }
 
   console.log('getFew', data)
@@ -23,17 +23,8 @@ exports.getFew = async (req, res) => {
     .limit(data.limit - readable.length)
     .exec()
 
-  let rWarn = {
-    _id: "Read-only data"
-  }
-
-  let wWarn = {
-    _id: "Writable data"
-  }
-
   let obj = {
-    count: rcount + wcount - 1,
-    rcount: readable.length,
+    count: rcount + wcount - 3,
     rcount,
     page: data.page,
     limit: data.limit,
@@ -45,18 +36,25 @@ exports.getFew = async (req, res) => {
   res.send(obj)
 };
 
-exports.getOne = (req, res) => {
-  Article.find(mongoose.Types.ObjectId(req.params.id))
-  .exec((err, data) => {
-      if (err) throw err;
-      res.send(data);
-  })
+exports.getOne = async(req, res) => {
+  let data = res.locals.data
+
+  console.log(data)
+
+  let writable = await Writable.find().skip(data.page * data.limit).limit(1).exec()
+
+  res.send(writable)
+}
+
+exports.getById = async(req, res) => {
+  let data = await Get(req.params.id)
+  res.send(data)
 };
 
 exports.putOne = (req, res) => {
   console.log('putOne')
   // Non-direct queries for using mongoose middlewares which not implemented here
-  Article.findById(mongoose.Types.ObjectId(req.params.id)) 
+  Writable.get(req.params.id) 
     .exec((err, article) => {
       if(err) {
         res.status(500).end();
@@ -74,7 +72,7 @@ exports.putOne = (req, res) => {
 };
 
 exports.postOne = (req, res) => {
-  article = new Article({
+  article = new Writable({
     title: req.body.title,
     body: req.body.body,
     created_at: new Date()
@@ -91,3 +89,7 @@ exports.postOne = (req, res) => {
   });
 };
 
+exports.deleteOne = async (req, res) => {
+  let resp = await Writable.delete(req.body.id)
+  res.send(resp)
+}

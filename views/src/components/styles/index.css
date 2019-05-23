@@ -5,7 +5,7 @@ Search bookmarks :
 Popup
 Header_Articles
 Table_styles
-
+Form
 
 Notes :
 
@@ -22,6 +22,10 @@ Style pinned in index.html contain styles for images and self.
 	border-radius: 10px;
 	padding: 10px 30px;
 	position: relative;
+}
+
+.container.main > button.delete {
+	border: 1px solid black;
 }
 
 .logo > a{
@@ -45,6 +49,11 @@ a, img {
 	-webkit-user-drag: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
+}
+
+button.delete {
+	border: none;
+  border-radius: 0;
 }
 
 /*Header_Articles*/
@@ -76,7 +85,7 @@ a, img {
 
 .popup-container {
 	width: 600px;
-	height: 300px;
+	height: 320px;
 	border-radius: 15px;
 	background: #fbf7f7f7;
 	position: absolute;
@@ -104,13 +113,13 @@ a, img {
 }
 
 .popup-body {
-	height: 170px;
+	height: 160px;
 	padding: 15px 50px;
 }
 
 .popup-time {
 	width: 100%;
-	height: 65px;
+	height: 50px;
 	border-top: 1px solid #c7c1c4;
 	padding: 10px 20px;
 }
@@ -125,8 +134,16 @@ a, img {
 	color: #0676ffe8;
 }
 
+.popup-container > button {
+	margin: 10px 0;
+	background-color: #dae0e5;
+}
 
 /*Table_styles*/
+
+.main-table {
+	margin-top: 25px;
+}
 
 div.ReactTable .-loading > div {
 	transform: none!important;
@@ -139,7 +156,7 @@ div.ReactTable .-loading > div {
 
 .pagination-bottom {
 	display: flex;
-    justify-content: center;
+  justify-content: center;
 }
 
 .Table__itemCount {
@@ -206,3 +223,23 @@ div > .rt-tr {
 	display: flex;
 }
 
+/* Form */
+
+.form-edit-form {
+	width: 290px; 
+}
+
+.form-edit > .delete {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+}
+
+.form-buttons {
+	float: right;
+}
+
+.form-edit-form > input, textarea {
+	margin: 10px 0;
+	width: 290px;
+}

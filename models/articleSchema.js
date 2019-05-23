@@ -18,5 +18,24 @@ const articleSchema = new mongoose.Schema({
   updated_at: Date,
 });
 
+const Writable = readWriteConnection.model('articles', articleSchema);
+
+Writable.get = (id) => {
+	return Writable.findById(mongoose.Types.ObjectId(id))
+}
+
+Writable.delete = (id) => {
+	return Writable.deleteOne({_id : mongoose.Types.ObjectId(id)})
+}
+
 exports.Readable = readConnection.model('articles', articleSchema);
-exports.Writable = readWriteConnection.model('articles', articleSchema);
+exports.Writable = Writable
+
+exports.Get = async(id) => {
+	let readable = await Readable.findById({_id : mongoose.Types.ObjectId(id)})
+  let writable = await Writable.findById({_id : mongoose.Types.ObjectId(id)})
+
+  return {
+  	data: [ readable, writable ]
+  }
+}

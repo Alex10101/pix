@@ -9,7 +9,7 @@ app.all('*', (req,res,next) => {
   if (!req.get('Origin')) return next();
 
   res.set('Access-Control-Allow-Origin','*');
-  res.set('Access-Control-Allow-Methods','GET,POST,PUT');
+  res.set('Access-Control-Allow-Methods','GET,POST,PUT,DELETE');
   res.set('Access-Control-Allow-Headers','X-Requested-With,Content-Type');
 
   if ('OPTIONS' == req.method) return res.sendStatus(200);
@@ -21,9 +21,11 @@ app.use(express.urlencoded({limit: '5kb', extended: true}));
 app.use(express.json({limit: '5kb'}));
 
 app.get('/articles', articleAsserts.getFew, articlesController.getFew);
-app.get('/articles/:id', articleAsserts.getOne, articlesController.getOne);
+app.get('/article', articleAsserts.getFew, articlesController.getOne);
+app.get('/articles/:id', articleAsserts.getOne, articlesController.getById);
 app.put('/articles/:id', articleAsserts.putOne, articlesController.putOne);
 app.post('/articles', articleAsserts.postOne, articlesController.postOne);
+app.put('/articles', articlesController.deleteOne);
 
 app.use(function set404(req, res) {
 	res.status(404).end({
