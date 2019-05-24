@@ -1,7 +1,34 @@
 import axios from 'axios';
 
-let host = 'http://localhost:8080'
- host = ''
+axios.interceptors.response.use(null, error => {
+	let once = true
+	function one() {
+		once = false
+		return axios.request(error.config);
+	}
+	
+	if(error.toString().indexOf('Network Error') > -1) {
+		if(!once) return false
+		setTimeout(one, 2000)
+		return
+	}
+
+	if(error.config.url.indexOf('/subscribe') > -1) {
+		return axios.request(error.config);
+	}
+});
+
+let host = ''
+
+if(window.location.href.indexOf('localhost:3000') > -1) {
+	host = 'http://localhost:8080'
+}
+
+export const subscribe = () => async dispatch => {
+	let res = await axios.get(`${host}/subscribe`)
+	if(!res) return
+	dispatch({ type: getArticle, payload: res.data })
+}
 
 export const getArticles = (page, limit) => async dispatch => {
 	// console.log('getArticles')

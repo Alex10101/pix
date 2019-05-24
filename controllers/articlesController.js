@@ -1,5 +1,9 @@
 const { Readable, Writable, Get } = require('../models/articleSchema');
-const mongoose = require('mongoose');
+
+const EventEmitter = require('events');
+class MyEmitter extends EventEmitter {}
+
+const events = new MyEmitter();
 
 exports.getFew = async (req, res) => {
   const data = res.locals.data;
@@ -8,7 +12,7 @@ exports.getFew = async (req, res) => {
     data['skip'] = (data.page * data.limit)
   }
 
-  // console.log('getFew', data)
+  console.log('getFew', data)
 
   let rcount  = await Readable.countDocuments()
   let wcount = await Writable.countDocuments()
@@ -64,6 +68,7 @@ exports.putOne = (req, res) => {
       
       article.save((saveErr, updatedFile) => {
           res.send({ updated_to: updatedFile });
+          events.emit('update', updatedFile)
       });
   });
 };
@@ -83,6 +88,7 @@ exports.postOne = (req, res) => {
     res.send({
       created: data
     })
+    events.emit('update', data)
   });
 };
 
@@ -92,5 +98,14 @@ exports.deleteOne = async (req, res) => {
 }
 
 exports.subscribe = (req, res) => {
-
+  res.on('close', () => {
+    console.log('close')
+  })
+  res.on('end', () => {
+    console.log('end')
+  })
+  console.log('sub')
+  events.on('update', (data) => {
+    res.send(data)
+  })
 }

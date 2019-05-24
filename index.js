@@ -4,7 +4,6 @@ const http = require('http');
 const pt = require('path')
 
 const articlesController = require('./controllers/articlesController');
-const viewsController = require('./controllers/viewsController');
 const articleAsserts = require('./services/articleAsserts');
 
 process.env.NODE_ENV !== "development" && 
@@ -20,9 +19,11 @@ app.all('*', (req,res,next) => {
   next();
 });
 
-app.use(express.static(pt.join(__dirname, 'views', 'build')))
+app.get('/favicon.ico', (req, res) => res.status(204));
+app.use(express.static(pt.join(__dirname, 'views/build')))
+app.use(express.static(pt.join(__dirname, 'views')))
 app.get('/', (req, res) => {
-  res.sendFile('index.html')
+  res.sendFile('iframe.html')
 })
 
 app.use(express.urlencoded({limit: '5kb', extended: true}));
