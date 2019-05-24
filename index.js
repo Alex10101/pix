@@ -1,7 +1,10 @@
 const express = require('express')
 const app = express();
+const http = require('http');
+const pt = require('path')
 
 const articlesController = require('./controllers/articlesController');
+const viewsController = require('./controllers/viewsController');
 const articleAsserts = require('./services/articleAsserts');
 
 process.env.NODE_ENV !== "development" && 
@@ -17,6 +20,11 @@ app.all('*', (req,res,next) => {
   next();
 });
 
+app.use(express.static(pt.join(__dirname, 'views', 'build')))
+app.get('/', (req, res) => {
+  res.sendFile('index.html')
+})
+
 app.use(express.urlencoded({limit: '5kb', extended: true}));
 app.use(express.json({limit: '5kb'}));
 
@@ -26,6 +34,9 @@ app.get('/articles/:id', articleAsserts.getOne, articlesController.getById);
 app.put('/articles/:id', articleAsserts.putOne, articlesController.putOne);
 app.post('/articles', articleAsserts.postOne, articlesController.postOne);
 app.put('/articles', articlesController.deleteOne);
+
+app.get('/subscribe', articlesController.subscribe)
+
 
 app.use(function set404(req, res) {
 	res.status(404).end({

@@ -24,6 +24,7 @@ const App = () => {
             <Route exact path="/" render={() => (
                 <Redirect to="/articles?page=1"/>
             )}/>
+
             <Route path="/articles:page?" component={Index} history={history}/>
             <Route component={NotFound}/>
           </Switch>

@@ -9,10 +9,10 @@ export default function ( state = [], action) {
             return  action.payload || false;
 
         case actions.getArticle:
-            console.log('actions.getArticle', state, action.payload)
+            // console.log('actions.getArticle', state, action.payload)
             data = {...state}
             if(!action.payload.length) {
-                console.log('return')
+                // console.log('return')
                 return data
             }
             data.articles.push(action.payload[0])
@@ -36,6 +36,7 @@ export default function ( state = [], action) {
                 data.refresh = true
                 data.count += -1
                 data.articles.splice([action.payload.index], 1)
+                console.log(data.count)
             return data;
 
         default:

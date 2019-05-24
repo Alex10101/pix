@@ -8,7 +8,7 @@ exports.getFew = async (req, res) => {
     data['skip'] = (data.page * data.limit)
   }
 
-  console.log('getFew', data)
+  // console.log('getFew', data)
 
   let rcount  = await Readable.countDocuments()
   let wcount = await Writable.countDocuments()
@@ -38,11 +38,8 @@ exports.getFew = async (req, res) => {
 
 exports.getOne = async(req, res) => {
   let data = res.locals.data
-
-  console.log(data)
-
+  // console.log(data)
   let writable = await Writable.find().skip(data.page * data.limit).limit(1).exec()
-
   res.send(writable)
 }
 
@@ -92,4 +89,8 @@ exports.postOne = (req, res) => {
 exports.deleteOne = async (req, res) => {
   let resp = await Writable.delete(req.body.id)
   res.send(resp)
+}
+
+exports.subscribe = (req, res) => {
+
 }

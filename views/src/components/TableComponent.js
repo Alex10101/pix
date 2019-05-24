@@ -19,9 +19,11 @@ class TableComponent extends Component {
 			this.addData()
 		}
 
-	  this.setState({
-			loading: false
-		})
+	  if(this.state.loading) {
+	  	this.setState({
+				loading: false
+			})
+	  }
 	}
 
 	handleURL(name) {
@@ -39,20 +41,19 @@ class TableComponent extends Component {
   	}
 	}
 
-	// item deleted
-	// refresh = true
-
-	// ignore refresh if
-	// this is the last page
-
-	// Get first item 
-	// from the next page
-
-	// and push in the end	
-
 	addData = () => {
 		let all = this.countPages()
 		let sp = this.state.page + 1
+
+		let t = this.props.articles
+
+		console.log(t)
+		// if(!t.articles.length && t.articles.count) {
+		// 	this.setState({
+		// 		page: this.state.page - 1
+		// 	})
+		// }
+
 		if(all < sp || all === sp) {
 			return
 		}
@@ -91,11 +92,8 @@ class TableComponent extends Component {
 	}
 
   render() {
-  	console.log('ReactTable', this.props)
+  	// console.log('ReactTable', this.props)
   	// console.log(this.state)
-  	// this.props.getArticle().then(data => {
-  	// 	console.log(data)
-  	// })
 
   	const { page, loading, limit } = this.state
   	const { setEditable, setDisplaying, articles } = this.props

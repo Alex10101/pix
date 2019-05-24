@@ -1,15 +1,16 @@
 import axios from 'axios';
 
-const host = 'http://localhost:8080'
+let host = 'http://localhost:8080'
+ host = ''
 
 export const getArticles = (page, limit) => async dispatch => {
-	console.log('getArticles')
+	// console.log('getArticles')
   const res = await axios.get(`${host}/articles`, { params: {page, limit }});
   dispatch({type: getArticles, payload: res.data});
 }
 
 export const getArticle = (page, limit) => async dispatch => {
-		console.log('getArticle')
+		// console.log('getArticle')
     const res = await axios.get(`${host}/article`, { params: { page, limit } });
     dispatch({type: getArticle, payload: res.data});
     return res.data
