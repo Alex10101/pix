@@ -1,4 +1,4 @@
-    First three columns is read-only.
+  First three columns is read-only.
 			
   This task on Heroku: https://table-crud.herokuapp.com/ 
      (Free services used so this slowing down sometimes)
