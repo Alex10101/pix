@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route} from 'react-router-dom';
 import createBrowserHistory from "history/createBrowserHistory";
 import Index from './Index';
 import NotFound from './NotFound';
@@ -20,14 +20,7 @@ const App = () => {
           <Popup/>
           <Route path="/articles/:id/edit" exact render={ (props) => <AppForm {...props} /> }/>
           <Route path="/articles/create" exact render={(props) => <AppForm {...props} />}/>
-          <Switch>
-            <Route exact path="/" render={() => (
-                <Redirect to="/articles?page=1"/>
-            )}/>
-
-            <Route path="/articles:page?" component={Index} history={history}/>
-            <Route component={NotFound}/>
-          </Switch>
+          <Route path="/" component={Index} history={history}/>
         </React.Fragment>
     	</BrowserRouter>
       </div>

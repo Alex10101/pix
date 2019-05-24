@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getArticles, setEditable, setDisplaying, getArticle } from '../actions/articles';
+import { getArticles, setEditable, setDisplaying, getArticle, subscribe } from '../actions/articles';
 import { Link } from 'react-router-dom';
 import Pagination from './Pagination';
 import 'react-table/react-table.css';
 import ReactTable from 'react-table';
-import { withRouter } from 'react-router-dom'
 
 class TableComponent extends Component {
 	state = {
-		page: this.handleURL('page') || 0,
-		limit: this.handleURL('limit') || 4,
-		loading: true
+		page:  0,
+		limit: 4,
+		loading: true,
+		subscribed: false
 	}
 
 	componentWillReceiveProps(nextProps, nextState) {
@@ -26,19 +26,13 @@ class TableComponent extends Component {
 	  }
 	}
 
-	handleURL(name) {
-  	let url = new URLSearchParams(window.location.search)
-  	let str = url.get(name)
-  	if(str !== false) {
-  		let num = Number(str)
-  		if(num > 0) {
-  			return num - 1
-  		} else {
-  			return num
-  		}
-  	} else {
-  		return false
-  	}
+	componentDidUpdate() {
+		if(!this.state.subscribed) {
+			this.props.subscribe()
+			this.setState({
+				subscribed: true
+			})
+		}
 	}
 
 	addData = () => {
@@ -72,9 +66,6 @@ class TableComponent extends Component {
 		})
 
 		this.props.getArticles(state.page, state.defaultPageSize)
-			.then((data) => {
-				this.props.history.push(`?page=${state.page}`)
-			})
 	}
 
 	sliceData = () => {
@@ -168,4 +159,4 @@ function mapStateToProps({articles}) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, { getArticles, setEditable, setDisplaying, getArticle })(TableComponent));
+export default connect(mapStateToProps, { getArticles, setEditable, setDisplaying, getArticle, subscribe })(TableComponent);
