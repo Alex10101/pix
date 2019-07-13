@@ -38,13 +38,8 @@ app.put('/articles', articlesController.deleteOne);
 
 app.get('/subscribe', articlesController.subscribe)
 
-
 app.use(function set404(req, res) {
-	res.status(404).end({
-	    "errors": [{
-	        "error": "Not Found"
-	    }]
-	})
+	res.status(404).end('error: Not Found')
 });
 
 app.use(function globErrorHandler(req, res, next) {
