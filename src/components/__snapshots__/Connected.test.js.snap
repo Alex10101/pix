@@ -1,3 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Account Details should change redux state 1`] = `""`;
+
+exports[`Void should change redux state 1`] = `""`;
