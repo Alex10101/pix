@@ -1,24 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getArticles, setEditable, setDisplaying, getArticle, subscribe } from '../actions/articles';
+import { getArticles, setEditable, setDisplaying } from '../actions/articles';
 import { Link } from 'react-router-dom';
-import Pagination from './Pagination';
+import Pagination from './Pagination-basic';
 import 'react-table/react-table.css';
 import ReactTable from 'react-table';
 
 class TableComponent extends Component {
 	state = {
 		page:  0,
-		limit: 4,
-		loading: true,
-		subscribed: false
+		limit: 10,
+		loading: false,
 	}
-
+	
 	componentWillReceiveProps(nextProps, nextState) {
-		if(nextProps.articles.refresh === true) {
-			this.addData()
-		}
-
 	  if(this.state.loading) {
 	  	this.setState({
 				loading: false
@@ -26,41 +21,8 @@ class TableComponent extends Component {
 	  }
 	}
 
-	componentDidUpdate() {
-		if(!this.state.subscribed) {
-			this.props.subscribe()
-			this.setState({
-				subscribed: true
-			})
-		}
-	}
-
-	addData = () => {
-		let all = this.countPages()
-		let sp = this.state.page + 1
-
-		let t = this.props.articles
-
-		console.log(t)
-		// if(!t.articles.length && t.articles.count) {
-		// 	this.setState({
-		// 		page: this.state.page - 1
-		// 	})
-		// }
-
-		if(all < sp || all === sp) {
-			return
-		}
-
-		if(this.state.page === 0) {
-			this.props.getArticle(1, 1)
-			return
-		}
-
-		this.props.getArticle(sp, this.state.limit)
-	}
-
 	fetchData = (state) => {
+		if(this.state.loading) return
 		this.setState({
 			loading: true
 		})
@@ -79,7 +41,9 @@ class TableComponent extends Component {
 	}
 
 	countPages = () => {
-		return Math.ceil(this.props.articles.count / this.state.limit) || 0
+		let count = Math.ceil(this.props.articles.count / this.state.limit) || 0
+		// console.log(count)
+		return count
 	}
 
   render() {
@@ -90,6 +54,8 @@ class TableComponent extends Component {
   	const { setEditable, setDisplaying, articles } = this.props
   	const { fetchData, sliceData, countPages } = this
 
+  	// PaginationComponent={Pagination}
+
     return (
       <ReactTable
       		manual
@@ -99,7 +65,7 @@ class TableComponent extends Component {
 			    page={this.state.page}
     			onPageChange={page => this.setState({page})}
 			    loading={loading}
-			    PaginationComponent={Pagination}
+			    
 			    pages={countPages()}			    
 			    className="-striped -highlight"
 			    NoDataComponent={() => <p></p>}
@@ -159,4 +125,4 @@ function mapStateToProps({articles}) {
   };
 }
 
-export default connect(mapStateToProps, { getArticles, setEditable, setDisplaying, getArticle, subscribe })(TableComponent);
+export default connect(mapStateToProps, { getArticles, setEditable, setDisplaying })(TableComponent);

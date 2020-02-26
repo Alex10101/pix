@@ -1,13 +1,27 @@
-import React, { Component } from "react";
-
-// The following code based on this example : https://codesandbox.io/s/012ywx6mp0
+import React from "react";
+import PropTypes from "prop-types";
 
 const defaultButton = props => <button {...props}>{props.children}</button>;
 
-class Pagination extends Component {
-  state = {
-    visiblePages: this.getVisiblePages(null, this.props.pages)
+export default class Pagination extends React.Component {
+  constructor(props) {
+    super();
+
+    this.changePage = this.changePage.bind(this);
+
+    this.state = {
+      visiblePages: this.getVisiblePages(null, props.pages)
+    };
   }
+
+  static propTypes = {
+    pages: PropTypes.number,
+    page: PropTypes.number,
+    PageButtonComponent: PropTypes.any,
+    onPageChange: PropTypes.func,
+    previousText: PropTypes.string,
+    nextText: PropTypes.string
+  };
 
   componentWillReceiveProps(nextProps) {
     if (this.props.pages !== nextProps.pages) {
@@ -19,11 +33,11 @@ class Pagination extends Component {
     this.changePage(nextProps.page + 1);
   }
 
-  filterPages(visiblePages, totalPages) {
+  filterPages = (visiblePages, totalPages) => {
     return visiblePages.filter(page => page <= totalPages);
   };
 
-  getVisiblePages(page, total) {
+  getVisiblePages = (page, total) => {
     if (total < 7) {
       return this.filterPages([1, 2, 3, 4, 5, 6], total);
     } else {
@@ -32,20 +46,24 @@ class Pagination extends Component {
       } else if (page % 5 >= 0 && page > 4 && page + 2 >= total) {
         return [1, total - 3, total - 2, total - 1, total];
       } else {
-        return [ 1, 2, 3, 4, 5, total ];
+        return [1, 2, 3, 4, 5, total];
       }
     }
   };
 
   changePage(page) {
     const activePage = this.props.page + 1;
+
     if (page === activePage) {
       return;
     }
+
     const visiblePages = this.getVisiblePages(page, this.props.pages);
+
     this.setState({
       visiblePages: this.filterPages(visiblePages, this.props.pages)
     });
+
     this.props.onPageChange(page - 1);
   }
 
@@ -53,6 +71,7 @@ class Pagination extends Component {
     const { PageButtonComponent = defaultButton } = this.props;
     const { visiblePages } = this.state;
     const activePage = this.props.page + 1;
+
     return (
       <div className="Table__pagination">
         <div className="Table__prevPageWrapper">
@@ -64,27 +83,23 @@ class Pagination extends Component {
             }}
             disabled={activePage === 1}
           >
+            {this.props.previousText}
           </PageButtonComponent>
         </div>
         <div className="Table__visiblePagesWrapper">
           {visiblePages.map((page, index, array) => {
             return (
-              <React.Fragment key={page}>
-                <PageButtonComponent
-                  key={page}
-                  className={
-                    activePage === page
-                      ? "Table__pageButton Table__pageButton--active"
-                      : "Table__pageButton"
-                  }
-                  onClick={this.changePage.bind(this, page)}
-                >
-                  {array[index - 1] + 2 < page ? `...${page}` : page}
-                </PageButtonComponent>
-                <div key={page + 'div'} className="Table__pageButton__Line">
-                  {index === visiblePages.length - 1 ? '' : '|'} 
-                </div>
-              </React.Fragment>
+              <PageButtonComponent
+                key={page}
+                className={
+                  activePage === page
+                    ? "Table__pageButton Table__pageButton--active"
+                    : "Table__pageButton"
+                }
+                onClick={this.changePage.bind(null, page)}
+              >
+                {array[index - 1] + 2 < page ? `...${page}` : page}
+              </PageButtonComponent>
             );
           })}
         </div>
@@ -97,11 +112,10 @@ class Pagination extends Component {
             }}
             disabled={activePage === this.props.pages}
           >
+            {this.props.nextText}
           </PageButtonComponent>
         </div>
       </div>
     );
   }
 }
-
-export default Pagination

@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter, Route} from 'react-router-dom';
 import createBrowserHistory from "history/createBrowserHistory";
 import Index from './Index';
-import NotFound from './NotFound';
+// import NotFound from './NotFound';
 import AppForm from './AppForm'
 import './styles/index.css';
 import Header from './Header';
@@ -10,7 +10,7 @@ import Popup from'./Popup';
 
 const history = createBrowserHistory();
 
-const App = () => {
+const App = () => {  
   return (
     <div className="App">
       <div className="container main"> 

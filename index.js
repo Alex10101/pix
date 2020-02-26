@@ -3,6 +3,7 @@ const app = express();
 const http = require('http');
 const pt = require('path')
 
+
 const articlesController = require('./controllers/articlesController');
 const articleAsserts = require('./services/articleAsserts');
 
@@ -30,13 +31,9 @@ app.use(express.urlencoded({limit: '5kb', extended: true}));
 app.use(express.json({limit: '5kb'}));
 
 app.get('/articles', articleAsserts.getFew, articlesController.getFew);
-app.get('/article', articleAsserts.getFew, articlesController.getOne);
-app.get('/articles/:id', articleAsserts.getOne, articlesController.getById);
 app.put('/articles/:id', articleAsserts.putOne, articlesController.putOne);
 app.post('/articles', articleAsserts.postOne, articlesController.postOne);
 app.put('/articles', articlesController.deleteOne);
-
-app.get('/subscribe', articlesController.subscribe)
 
 app.use(function set404(req, res) {
 	res.status(404).end('error: Not Found')
@@ -45,7 +42,6 @@ app.use(function set404(req, res) {
 app.use(function globErrorHandler(req, res, next) {
   console.log("globErrorHandler")
   res.send('err');
-  return;
 });
 
 process.on('unhandledRejection', unhandledRejection = (reason, p) => {

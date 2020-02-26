@@ -39,7 +39,7 @@ Style pinned in index.html contain styles for images and self.
 .container.main {
 	margin: 7% auto;
 	background: #d3d3d3bd;
-	height: 500px;
+	/*height: 500px;*/
 	border-radius: 10px;
 	padding: 10px 30px;
 	position: relative;

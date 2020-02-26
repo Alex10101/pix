@@ -6,10 +6,8 @@ mongoose.set('useNewUrlParser', true);
 
 mongoose.connection.on('error', (err) => { console.error(err); process.exit(); });
 
-const readURL = process.env.DB_READ || 'mongodb://dan:dan123@ds259806.mlab.com:59806/pix'
-const writeURL = process.env.DB_WRITE || 'mongodb://dan:dan123@ds247347.mlab.com:47347/node'
-const readConnection      = mongoose.createConnection(readURL);
-const readWriteConnection = mongoose.createConnection(writeURL);
+const URL = process.env.DB || 'mongodb://127.0.0.1:27017/pix'
+const connection = mongoose.createConnection(URL);
 
 const articleSchema = new mongoose.Schema({
   title: String,
@@ -18,24 +16,18 @@ const articleSchema = new mongoose.Schema({
   updated_at: Date,
 });
 
-const Writable = readWriteConnection.model('articles', articleSchema);
+const Articles = connection.model('articles', articleSchema);
 
-Writable.get = (id) => {
-	return Writable.findById(mongoose.Types.ObjectId(id))
+Articles.delete = (id) => {
+	return Articles.deleteOne({_id : mongoose.Types.ObjectId(id)})
 }
 
-Writable.delete = (id) => {
-	return Writable.deleteOne({_id : mongoose.Types.ObjectId(id)})
+exports.Articles = Articles
+
+exports.MockChange = () => {  
+  const changeStream = Articles.watch()
+  changeStream.on('change', data => {
+    console.log(data)
+  });
 }
 
-exports.Readable = readConnection.model('articles', articleSchema);
-exports.Writable = Writable
-
-exports.Get = async(id) => {
-	let readable = await Readable.findById({_id : mongoose.Types.ObjectId(id)})
-  let writable = await Writable.findById({_id : mongoose.Types.ObjectId(id)})
-
-  return {
-  	data: [ readable, writable ]
-  }
-}
